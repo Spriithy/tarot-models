@@ -25,6 +25,11 @@ public class ModelWriter<T extends AbstractModel> {
         new File(path).mkdirs();
     }
 
+    public ModelWriter(String path, Class<T> tClass) {
+        this.path = path + "/" + tClass.getSimpleName();
+        new File(path).mkdirs();
+    }
+
     public void write(T tObject) {
         String objectPath = path + "/" + tObject.getId();
         try (FileOutputStream f = new FileOutputStream(new File(objectPath))) {
