@@ -23,6 +23,10 @@ public class ModelReader<T extends AbstractModel> {
         this.path = path;
     }
 
+    public ModelReader(String path, Class<T> tClass) {
+        this.path = path + "/" + tClass.getSimpleName();
+    }
+
     public String getPath() {
         return path;
     }

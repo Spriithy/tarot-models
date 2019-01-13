@@ -35,8 +35,12 @@ public abstract class AbstractModel implements Serializable {
     public abstract AbstractModel get(String id);
 
     protected static <T extends AbstractModel> void loadLocalModels(Class<T> tClass) {
+        loadLocalModels(ModelStore.getPath() + "/" + tClass.getSimpleName());
+    }
+
+    protected static <T extends AbstractModel> void loadLocalModels(String path) {
         localModels = new HashMap<>();
-        ModelReader<T> modelReader = new ModelReader<T>(tClass);
+        ModelReader<T> modelReader = new ModelReader<T>(path);
         try (Stream<Path> paths = Files.walk(Paths.get(modelReader.getPath()))) {
             paths.filter(Files::isRegularFile).map(Path::toString).forEach(modelId -> {
                 localModels.put(modelId, modelReader.read(modelId));
@@ -44,5 +48,9 @@ public abstract class AbstractModel implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    protected static <T extends AbstractModel> void loadLocalModels(String path, Class<T> tClass) {
+        loadLocalModels(path + "/" + tClass.getSimpleName());
     }
 }
